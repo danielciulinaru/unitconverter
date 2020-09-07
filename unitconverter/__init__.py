@@ -1,4 +1,4 @@
 from .core import UnitConverter
 
-__version__ = "0.2"
+__version__ = "0.5"
 __app_name__ = "unitconverter"

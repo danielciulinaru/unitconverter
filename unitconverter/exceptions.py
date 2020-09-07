@@ -25,7 +25,7 @@ class UnitConverterError(BaseTemplateError):
     ):
         if not message:
             if numeral:
-                message = f"Size numeral cannot be a non-digit or empty: {numeral}"
+                message = f"Numeral cannot be a non-digit or empty: {numeral}"
             if validated_unit:
                 message = f"Extracted unit not in the approved list: {validated_unit}"
             if size_unit:
