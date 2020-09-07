@@ -50,12 +50,12 @@ class UnitConverter(object):
             self,
             precision=0,
             default_unit="MB",
-            spaced_units=False,
+            spaced_unit=False,
     ):
         self.identifier = None
         self.precision = precision
         self.default_unit = default_unit
-        self.spaced_units = spaced_units
+        self.spaced_unit = spaced_unit
 
     def convert(self, identifier, intended_unit=None):
         self.identifier = identifier
@@ -68,3 +68,11 @@ class UnitConverter(object):
             self.identifier, self.default_unit
         )
         return self.converted_numeral, self.converted_unit, self.converted_size
+
+    def set_precision(self, precision: int):
+        self.precision = precision
+        return self
+
+    def set_spaced_unit(self, value: bool):
+        self.spaced_unit = value
+        return self

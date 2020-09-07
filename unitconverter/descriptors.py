@@ -65,7 +65,7 @@ class _SizeDescriptor(object):
         self.name = name
 
     def __get__(self, instance, owner):
-        if hasattr(instance, "spaced_units") and instance.spaced_units is True:
+        if hasattr(instance, "spaced_unit") and instance.spaced_unit is True:
             if self.name == "validated_size":
                 return f"{instance.validated_numeral} {instance.validated_unit}"
             elif self.name == "converted_size":
