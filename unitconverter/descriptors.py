@@ -1,7 +1,6 @@
-from .exceptions import UnitConverterError
-from .functions import is_digit
-from .functions import is_unit
 from .constants import FACTOR
+from .exceptions import UnitConverterError
+from .functions import is_unit, normalize_unit, get_conversion_power
 
 
 class _NumeralDescriptor(object):
@@ -14,22 +13,15 @@ class _NumeralDescriptor(object):
         self.name = name
 
     def __set__(self, instance, numeral):
-        if is_digit(numeral):
-            self.__dict__[self.name] = float(numeral)
-        else:
-            msg = "parsing the numeral generated an empty value"
-            raise UnitConverterError(msg)
+        self.__dict__[self.name] = numeral
 
     def __get__(self, instance, owner):
         if self.name == "converted_numeral":
-            power = instance.get_conversion_power(
+            power = get_conversion_power(
                 instance.validated_unit, instance.intended_unit
             )
-            converted_result = float(instance.validated_numeral * (FACTOR ** power))
-            if instance.truncate_decimals is True:
-                return int(round(converted_result, 0))
-            elif instance.truncate_decimals is False:
-                return round(converted_result, instance.rounding_decimals)
+            converted_result = instance.validated_numeral * (FACTOR ** power)
+            return round(converted_result, instance.precision)
         elif self.name == "validated_numeral":
             return self.__dict__[self.name]
 
@@ -54,7 +46,7 @@ class _UnitDescriptor(object):
         elif self.name == "validated_unit":
             if is_unit(work_unit) is False:
                 raise UnitConverterError(validated_unit=unit)
-        self.__dict__[self.name] = instance.normalize_unit(work_unit)
+        self.__dict__[self.name] = normalize_unit(work_unit)
 
     def __get__(self, instance, owner):
         return self.__dict__[self.name]
