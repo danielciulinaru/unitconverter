@@ -3,7 +3,7 @@ from typing import List, NewType, Union, AnyStr
 
 Digit = NewType('Digit', Union[str, float, int])
 
-FACTOR: Decimal = Decimal(1024)
+POWERFACTOR: Decimal = Decimal(1024)
 B: AnyStr = "b"
 K: AnyStr = "k"
 KB: AnyStr = "kb"

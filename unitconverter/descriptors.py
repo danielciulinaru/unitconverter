@@ -1,12 +1,12 @@
-from .constants import FACTOR
+from .constants import POWERFACTOR
 from .exceptions import UnitConverterError
 from .functions import is_unit, normalize_unit, get_conversion_power
 
 
 class _NumeralDescriptor(object):
     """
-    Numeral descriptor, handles the validation of numerals. Raises a UnitCheckError exception in case of an
-    invalid numeral
+    Numeral descriptor:
+    - handles the conversion of the numeral based on the power factor called POWERFACTOR
     """
 
     def __set_name__(self, owner, name):
@@ -20,7 +20,7 @@ class _NumeralDescriptor(object):
             power = get_conversion_power(
                 instance.validated_unit, instance.intended_unit
             )
-            converted_result = instance.validated_numeral * (FACTOR ** power)
+            converted_result = instance.validated_numeral * (POWERFACTOR ** power)
             return round(converted_result, instance.precision)
         elif self.name == "validated_numeral":
             return self.__dict__[self.name]
@@ -28,7 +28,8 @@ class _NumeralDescriptor(object):
 
 class _UnitDescriptor(object):
     """
-    Descriptor, it encapsulates the verification of units, performed with is_unit(). It raises a UnitCheckError
+    Unit descriptor:
+    - it encapsulates the verification of units, performed with is_unit(). It raises a UnitConverterError
     exception in case of an invalid unit that's not part of the UNITS_LIST
     """
 
@@ -56,11 +57,15 @@ class _UnitDescriptor(object):
 
 
 class _SizeDescriptor(object):
+    """
+    Size descriptor:
+    - handles the display of the SizeUnit variable, with or without spaces
+    """
     def __set_name__(self, owner, name):
         self.name = name
 
     def __get__(self, instance, owner):
-        if hasattr(instance, "spaced_units") and instance.spaced_units is True:
+        if hasattr(instance, "spaced_unit") and instance.spaced_unit is True:
             if self.name == "validated_size":
                 return f"{instance.validated_numeral} {instance.validated_unit}"
             elif self.name == "converted_size":
@@ -70,19 +75,3 @@ class _SizeDescriptor(object):
                 return f"{instance.validated_numeral}{instance.validated_unit}"
             elif self.name == "converted_size":
                 return f"{instance.converted_numeral}{instance.converted_unit}"
-
-
-class _Identifier(object):
-    def __set_name__(self, owner, name):
-        self.name = name
-
-    def __set__(self, instance, identifier):
-        if identifier is None or identifier is False:
-            raise UnitConverterError(numeral=identifier)
-        else:
-            self.__dict__[self.name] = (
-                str(identifier).replace(",", "").strip().replace(" ", "")
-            )
-
-    def __get__(self, instance, owner):
-        return self.__dict__[self.name]
