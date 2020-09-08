@@ -1,7 +1,7 @@
     **UnitConverter package**
     
     The goal of this package is to normalize and perform standard transformation of digital units.
-    The original intent was to provide standard digital units to an Oracle ecosystem (RMAN, sqlplus, etc) and these units come in the format of "120M" for 120 megabytes.
+    The original intent was to provide a standard format for the digital units used in an Oracle ecosystem (RMAN, sqlplus, etc) and these units come in the format of "120M" for 120 megabytes.
     
     class UnitConverter:
     - convert(): takes in a string representing information quantity and converts it in the intended unit
